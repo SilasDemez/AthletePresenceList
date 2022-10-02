@@ -19,7 +19,7 @@ async function getGroupPresenceList(){
     return response.json();
 }
 
-let url = 'demez.asuscomm.com:3000/grouppresencelist'
+let url = 'http://demez.asuscomm.com:3000/group'
 let data =  {
     group_id: 1
 }
