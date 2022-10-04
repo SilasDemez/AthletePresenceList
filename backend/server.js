@@ -22,10 +22,27 @@ app.get('/addpresence:athlete_id:date', async (req, res) => {
     console.log(req.params.date);
     let str = req.params.date.toString();
     str = str.slice(1);
-    console.log("STR: " + str);
-    let re = await db.querydb(`INSERT INTO presences (athlete_id, training_date) VALUES ('${req.params.athlete_id.toString()}', '${str.toString()}');`);
-    res.send(re);
+    console.log("STR:" + str);
+    let query = `INSERT INTO presences (athlete_id, training_date) VALUES ('${req.params.athlete_id.toString()}', '${str.toString()}');`
+    let re = await db.querydb(query);
     console.log(re);
+    res.send("ok");
+    // res.send(re.toString());
+    
+});
+
+app.get('/rempresence:athlete_id:date', async (req, res) => {
+    console.log(req.params.athlete_id);
+    console.log(req.params.date);
+    let str = req.params.date.toString();
+    str = str.slice(1);
+    console.log("STR:" + str);
+    let query = `DELETE FROM presences WHERE athlete_id = ${req.params.athlete_id.toString()} AND training_date LIKE '${str.toString()}';`
+    let re = await db.querydb(query);
+    console.log(re);
+    res.send("ok");
+    // res.send(re.toString());
+    
 });
 
 
