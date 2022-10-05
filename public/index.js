@@ -16,7 +16,30 @@ async function getGroupPresenceList(){
         body: JSON.stringify(data) // body data type must match "Content-Type" header
     });
     //console.log(response.json()); // parses JSON response into native JavaScript objects
-    return response.json();
+    return await response.json();
+}
+
+
+function writeGroupPresenceList(presences){
+    console.log(presences)
+    const tbl = document.createElement('table');
+    presences.forEach(athlete => {
+        const tr = tbl.insertRow();
+        
+        const td1 = tr.insertCell();
+        td1.appendChild(document.createTextNode(athlete.athlete_name));
+        const td2 = tr.insertCell();
+        td2.appendChild(document.createTextNode(athlete.athlete_lastname));
+        const td3 = tr.insertCell();
+        let checkbox = document.createElement('input');
+        checkbox.setAttribute('type', 'checkbox');
+        td3.appendChild(checkbox);
+    });
+    document.getElementById('group1').appendChild(tbl)
+}
+
+function addpresences(){
+    console.log("Adding presence");
 }
 
 let url = 'http://localhost:3000/presences'
@@ -24,5 +47,10 @@ let data =  {
     group_id: 1
 }
 
-let res = getGroupPresenceList();
-console.log(res);
+async function main(){
+    let res = await getGroupPresenceList();
+    console.log(res);
+    writeGroupPresenceList(res)
+}
+
+main();
