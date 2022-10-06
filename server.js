@@ -20,12 +20,18 @@ async function startserver(){
 }
 
 app.post('/addpresence', async (req, res) => {
-    console.log(req.body.athlete_id);
-    console.log(req.body.date);
-    let query = `INSERT INTO presences (athlete_id, training_date) VALUES ('${req.body.athlete_id.toString()}', '${req.body.date.toString()}');`
+    console.log("Athlete name: " + req.body.athlete_name);
+    console.log("Athlete lastname: " + req.body.athlete_lastname);
+    console.log("Date received: " + req.body.date);
+    let query = `
+        INSERT INTO presences (athlete_id, training_date)
+        VALUES ((
+            SELECT athlete_id 
+            FROM athletelist 
+            WHERE athlete_name LIKE '${req.body.athlete_name}' AND athlete_lastname LIKE '${req.body.athlete_lastname}'), '${req.body.date}');`
     let re = await db.querydb(query);
     console.log(re);
-    res.send("ok");
+    res.send("");
     // res.send(re.toString());
     
 });
