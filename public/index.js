@@ -1,6 +1,6 @@
 async function getGroupPresenceList(){
 
-    let url = 'http://localhost:3000/presences'
+    let url = 'https://athletepresencelist.herokuapp.com:3000/presences'
     let data =  {
         group_id: 1
     }
@@ -90,7 +90,7 @@ function writeGroupPresenceList(presences){
 async function addquerypresence(firstname, lastname, date){
 
     console.log("Adding presence");
-    let url = 'http://localhost:3000/addpresence'
+    let url = 'https://athletepresencelist.herokuapp.com:3000/addpresence'
     
     let data =  {
         athlete_name: firstname,
