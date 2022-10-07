@@ -128,7 +128,7 @@ async function addpresences(){
     let table = document.getElementById("table1");
     console.log("Table.rows: " + table.rows.length);
 
-    for (let i = 0; i< table.rows.length; i++) {
+    for (let i = 0; i< table.rows.length-2; i++) {
         let checkbox = document.getElementById(`${i}0`);
         console.log(checkbox);
         if(checkbox.checked){
