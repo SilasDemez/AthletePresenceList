@@ -47,11 +47,15 @@ app.post('/rempresence', async (req, res) => {
     
 });
 
+async function toJson(data) {
+    return JSON.stringify(data, (_, v) => typeof v === 'bigint' ? `${v}n` : v)
+        .replace(/"(-?\d+)n"/g, (_, a) => a);
+}
 
 app.post('/presences', async (req, res) => {
     console.log(req.body.group_id);
     let re = await db.querydb(`
-        SELECT cast(count(athlete_ID) AS CHAR) AS presences, athlete_name, athlete_lastname
+        SELECT count(athlete_ID) AS presences, athlete_name, athlete_lastname
         FROM presences JOIN
         athletelist USING(athlete_id)
         WHERE group_id = ${req.body.group_id.toString()}
@@ -59,7 +63,12 @@ app.post('/presences', async (req, res) => {
         ORDER BY presences DESC;
     `);
     console.log(re);
-    res.send(re);
+
+    let data = await toJson(re);
+    console.log("Data: ")
+    console.log(data)
+
+    res.send(data);
 });
 
 module.exports = {
