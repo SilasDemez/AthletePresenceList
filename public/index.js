@@ -27,15 +27,17 @@ async function getGroupPresenceList(){
 
 function writeGroupPresenceList(presences){
     console.log(presences)
-    const tbl = document.createElement('table');
-    tbl.setAttribute('id', 'table1');
+    const tbl = document.getElementById('table1');
     presences.forEach((athlete, i) => {
         const tr = tbl.insertRow();
+
         const td1 = tr.insertCell();
-        let firstname = document.createElement('div');
-        firstname.innerHTML = athlete.athlete_name
-        firstname.setAttribute('id', i.toString() + '0');
-        td1.appendChild(firstname);
+        td1.setAttribute('class', 'checkboxCell');
+        let checkbox = document.createElement('input');
+        checkbox.setAttribute('type', 'checkbox');
+        checkbox.setAttribute('class', 'checkbox');
+        checkbox.setAttribute('id', i.toString() + '0');
+        td1.appendChild(checkbox);
         
         const td2 = tr.insertCell();
         let lastname = document.createElement('div');
@@ -44,16 +46,50 @@ function writeGroupPresenceList(presences){
         td2.appendChild(lastname);
         
         const td3 = tr.insertCell();
-        let checkbox = document.createElement('input');
-        checkbox.setAttribute('type', 'checkbox');
-        checkbox.setAttribute('id', i.toString() + '2');
-        td3.appendChild(checkbox);
+        let firstname = document.createElement('div');
+        firstname.innerHTML = athlete.athlete_name
+        firstname.setAttribute('id', i.toString() + '2');
+        td3.appendChild(firstname);
+
+        const td4 = tr.insertCell();
+        let presences = document.createElement('div');
+        presences.innerHTML = athlete.presences;
+        presences.setAttribute('id', i.toString() + '3');
+        td4.appendChild(presences);
     });
+
+    let tr = tbl.insertRow();
+    const td5 = tr.insertCell();
+    const td13 = tr.insertCell();
+    td13.appendChild(document.createTextNode(" "));
+    
+    let tr1 = tbl.insertRow();
+
+    //
+
+    let td6 = tr1.insertCell();
+    td6.appendChild(document.createTextNode(""));
+
+
+    let td7 = tr1.insertCell();
+    let datepicker = document.createElement('input');
+    datepicker.setAttribute('type', 'date');
+    datepicker.setAttribute('id', 'datepicker');
+    td7.appendChild(datepicker);
+
+    let td8 = tr1.insertCell();
+    let button = document.createElement('button');
+    button.setAttribute('onclick', 'javascript: addpresences()');
+    button.setAttribute('id', 'btn1');
+    button.innerHTML = 'Submit';
+    td8.appendChild(button);
+
     document.getElementById('group1').appendChild(tbl)
 }
 
 async function addquerypresence(firstname, lastname, date){
 
+    console.log("Adding presence");
     let url = 'http://localhost:3000/addpresence'
     
     let data =  {
@@ -79,7 +115,7 @@ async function addquerypresence(firstname, lastname, date){
         body: JSON.stringify(data) // body data type must match "Content-Type" header
     });
     //console.log(response.json()); // parses JSON response into native JavaScript objects
-    await response.json();
+    let a = await response;
     return "";
 }
 
@@ -93,15 +129,20 @@ async function addpresences(){
     console.log("Table.rows: " + table.rows.length);
 
     for (let i = 0; i< table.rows.length; i++) {
-        let checkbox = document.getElementById(`${i}2`);
+        let checkbox = document.getElementById(`${i}0`);
         console.log(checkbox);
         if(checkbox.checked){
             console.log("Checked");
-            let firstname = document.getElementById(`${i}0`).innerHTML;
+            let firstname = document.getElementById(`${i}2`).innerHTML;
             let lastname = document.getElementById(`${i}1`).innerHTML;
             console.log(await addquerypresence(firstname, lastname, date));
         }
     }
+
+    document.getElementById('table1').innerHTML = null;
+    let res = await getGroupPresenceList();
+    console.log(res);
+    writeGroupPresenceList(res)
 }
 
 
